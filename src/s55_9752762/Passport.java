@@ -7,10 +7,13 @@ import java.util.Random;
 
 public class Passport {
     private char[][] matrix;
+    private int magnetStripeLength;
+
     private CryptoEngine cryptoEngine;
 
     public Passport(String firstName, String lastName, Date birthdate, MatrixItem[][] face, CryptoEngine cryptoEngine) {
         // initialize matrix
+        matrix = new char[250][50];
         for (int i = 0; i < 250; i++) {
             for (int j = 0; j < 50; j++) {
                 matrix[i][j] = (char) (new Random().nextInt(10) + 48);
@@ -29,7 +32,9 @@ public class Passport {
         // encrypt magnetStripe
         this.cryptoEngine = cryptoEngine;
         DateFormat dateFormat = new SimpleDateFormat("dd-mm-yyyy");
+        String magnetStripeString = "|" + firstName + "|" + lastName + "|" + dateFormat.format(birthdate) + "|" + facePoints + "|";
         String magnetStripe = this.cryptoEngine.encrypt("|" + firstName + "|" + lastName + "|" + dateFormat.format(birthdate) + "|" + facePoints + "|");
+        magnetStripeLength = magnetStripe.length();
 
         // write encrypted magnetStripe to passport-matrix
         int counter = 0;
@@ -49,5 +54,39 @@ public class Passport {
 
     public char[][] getMatrix() {
         return matrix;
+    }
+
+    public String getMagnetStripe() {
+        char[][] magnetStripe = new char[200][2];
+        String ret = "";
+        int counter = 0;
+        for (int i = 0; i < 2; i++) {
+            for (int j = 0; j < 200; j++) {
+                ret += matrix[j + 25][i + 45];
+                counter++;
+                if (counter == magnetStripeLength) {
+                    break;
+                }
+//                magnetStripe[j][i] = matrix[j + 25][i + 45];
+            }
+            if (counter == magnetStripeLength) {
+                break;
+            }
+        }
+        return ret;
+    }
+
+    public String getMatrixAsString() {
+        String ret = "";
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[i].length; j++) {
+                ret += matrix[i][j];
+            }
+        }
+        return ret;
+    }
+
+    public CryptoEngine getCryptoEngine() {
+        return cryptoEngine;
     }
 }

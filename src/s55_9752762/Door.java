@@ -1,6 +1,6 @@
 package s55_9752762;
 
-public class Door {
+public class Door implements IListener{
     private boolean isOpen;
 
     public Door() {
@@ -13,5 +13,9 @@ public class Door {
 
     public void close() {
         isOpen = false;
+    }
+
+    public void personDetected(ICommand command) {
+        command.execute();
     }
 }

@@ -16,6 +16,7 @@ public class Person {
         this.lastName = lastName;
         this.birthdate = birthdate;
 
+        face = new MatrixItem[250][500];
         int counter = 1;
         for (int i = 0; i < 250; i++) {
             for (int j = 0; j < 500; j++) {
@@ -25,7 +26,6 @@ public class Person {
         }
         face = this.strategy.fillMatrix(face);
 
-        // TODO: zum Testen auch mal mit DESCryptoEngine ausprobieren
         this.passport = new Passport(
                 firstName,
                 lastName,
@@ -33,5 +33,21 @@ public class Person {
                 face,
                 new AESCryptoEngine()
         );
+    }
+
+    public Passport getPassport() {
+        return passport;
+    }
+
+    public MatrixItem[][] getFace() {
+        return face;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
     }
 }

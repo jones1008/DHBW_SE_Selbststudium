@@ -4,7 +4,16 @@ public class Sluice {
     private FaceReader faceReader;
     private SluiceSensor sensor;
 
+    public Sluice() {
+        faceReader = new FaceReader();
+        sensor = new SluiceSensor();
+    }
+
     public FaceReader getFaceReader() {
         return faceReader;
+    }
+
+    public SluiceSensor getSensor() {
+        return sensor;
     }
 }

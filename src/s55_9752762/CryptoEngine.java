@@ -2,51 +2,65 @@ package s55_9752762;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
+import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.Base64;
 
 public abstract class CryptoEngine {
-    private SecretKeySpec secretKeySpec;
+    private static SecretKeySpec secretKey;
+    private static byte[] key;
     protected String cipherMethod;
+    private String myKey = "geheim";
 
-    public String encrypt(String data) {
-        // Verschluesseln
+    protected void setSecretKey(String myKey)
+    {
+        MessageDigest sha = null;
         try {
-            Cipher cipher = Cipher.getInstance(cipherMethod);
-            cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec);
-            byte[] encrypted = cipher.doFinal(data.getBytes());
-            // bytes zu Base64-String konvertieren (dient der Lesbarkeit)
-            return Base64.getEncoder().encodeToString(encrypted);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "";
-        }
-    }
-
-    public String decrypt(String data) {
-        try {
-            byte[] crypted2 = Base64.getDecoder().decode(data);
-            Cipher cipher2 = Cipher.getInstance(cipherMethod);
-            cipher2.init(Cipher.DECRYPT_MODE, secretKeySpec);
-            byte[] cipherData2 = cipher2.doFinal(crypted2);
-            return new String(cipherData2);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "";
-        }
-    }
-
-    protected void setSecretKey() {
-        try {
-            String keyStr = "geheim!";
-            byte[] key = (keyStr).getBytes("UTF-8");
-            MessageDigest sha = MessageDigest.getInstance("SHA-256");
+            key = myKey.getBytes("UTF-8");
+            sha = MessageDigest.getInstance("SHA-1");
             key = sha.digest(key);
             key = Arrays.copyOf(key, 16);
-            secretKeySpec = new SecretKeySpec(key, cipherMethod);
-        } catch (Exception e) {
+            secretKey = new SecretKeySpec(key, cipherMethod);
+        }
+        catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
+        catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public String encrypt(String strToEncrypt)
+    {
+        try
+        {
+            setSecretKey(myKey);
+            Cipher cipher = Cipher.getInstance(cipherMethod+"/ECB/PKCS5Padding");
+            cipher.init(Cipher.ENCRYPT_MODE, secretKey);
+            return Base64.getEncoder().encodeToString(cipher.doFinal(strToEncrypt.getBytes("UTF-8")));
+        }
+        catch (Exception e)
+        {
+            System.out.println("Error while encrypting: " + e.toString());
+        }
+        return null;
+    }
+
+    public String decrypt(String strToDecrypt)
+    {
+        try
+        {
+            setSecretKey(myKey);
+            Cipher cipher = Cipher.getInstance(cipherMethod+"/ECB/PKCS5PADDING");
+            cipher.init(Cipher.DECRYPT_MODE, secretKey);
+            return new String(cipher.doFinal(Base64.getDecoder().decode(strToDecrypt)));
+        }
+        catch (Exception e)
+        {
+            System.out.println("Error while decrypting: " + e.toString());
+        }
+        return null;
     }
 }
