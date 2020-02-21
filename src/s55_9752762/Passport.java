@@ -5,10 +5,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Random;
 
-public class Passport {
+public class Passport implements IPassport {
     private char[][] matrix;
     private int magnetStripeLength;
-
     private CryptoEngine cryptoEngine;
 
     public Passport(String firstName, String lastName, Date birthdate, MatrixItem[][] face, CryptoEngine cryptoEngine) {
@@ -32,7 +31,6 @@ public class Passport {
         // encrypt magnetStripe
         this.cryptoEngine = cryptoEngine;
         DateFormat dateFormat = new SimpleDateFormat("dd-mm-yyyy");
-        String magnetStripeString = "|" + firstName + "|" + lastName + "|" + dateFormat.format(birthdate) + "|" + facePoints + "|";
         String magnetStripe = this.cryptoEngine.encrypt("|" + firstName + "|" + lastName + "|" + dateFormat.format(birthdate) + "|" + facePoints + "|");
         magnetStripeLength = magnetStripe.length();
 
@@ -52,8 +50,8 @@ public class Passport {
         }
     }
 
-    public char[][] getMatrix() {
-        return matrix;
+    public CryptoEngine getCryptoEngine() {
+        return cryptoEngine;
     }
 
     public String getMagnetStripe() {
@@ -67,26 +65,11 @@ public class Passport {
                 if (counter == magnetStripeLength) {
                     break;
                 }
-//                magnetStripe[j][i] = matrix[j + 25][i + 45];
             }
             if (counter == magnetStripeLength) {
                 break;
             }
         }
         return ret;
-    }
-
-    public String getMatrixAsString() {
-        String ret = "";
-        for (int i = 0; i < matrix.length; i++) {
-            for (int j = 0; j < matrix[i].length; j++) {
-                ret += matrix[i][j];
-            }
-        }
-        return ret;
-    }
-
-    public CryptoEngine getCryptoEngine() {
-        return cryptoEngine;
     }
 }

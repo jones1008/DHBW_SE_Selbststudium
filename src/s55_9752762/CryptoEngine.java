@@ -8,29 +8,11 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.Base64;
 
-public abstract class CryptoEngine {
+public abstract class CryptoEngine implements ICryptoEngine {
     private static SecretKeySpec secretKey;
     private static byte[] key;
     protected String cipherMethod;
     private String myKey = "geheim";
-
-    protected void setSecretKey(String myKey)
-    {
-        MessageDigest sha = null;
-        try {
-            key = myKey.getBytes("UTF-8");
-            sha = MessageDigest.getInstance("SHA-1");
-            key = sha.digest(key);
-            key = Arrays.copyOf(key, 16);
-            secretKey = new SecretKeySpec(key, cipherMethod);
-        }
-        catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-        catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-    }
 
     public String encrypt(String strToEncrypt)
     {
@@ -62,5 +44,23 @@ public abstract class CryptoEngine {
             System.out.println("Error while decrypting: " + e.toString());
         }
         return null;
+    }
+
+    private void setSecretKey(String myKey)
+    {
+        MessageDigest sha = null;
+        try {
+            key = myKey.getBytes("UTF-8");
+            sha = MessageDigest.getInstance("SHA-1");
+            key = sha.digest(key);
+            key = Arrays.copyOf(key, 16);
+            secretKey = new SecretKeySpec(key, cipherMethod);
+        }
+        catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -8,6 +8,6 @@ public class ScanPassportCommand implements ICommand {
     }
 
     public void execute() {
-        passportReader.scanPassport();
+        passportReader.scanPassportCommand();
     }
 }

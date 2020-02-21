@@ -1,7 +1,7 @@
 package s55_9752762;
 
 public class ReaderSensor extends Sensor {
-    public void scanPassportCommand() {
+    void scanPassportCommand() {
         command.execute();
     }
 }

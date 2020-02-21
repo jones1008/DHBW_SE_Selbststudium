@@ -2,7 +2,7 @@ package s55_9752762;
 
 import java.util.Date;
 
-public class Person {
+public class Person implements IPerson {
     private MatrixItem[][] face;
     private IStrategy strategy;
     private Passport passport;

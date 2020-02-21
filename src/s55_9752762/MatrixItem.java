@@ -1,6 +1,6 @@
 package s55_9752762;
 
-public class MatrixItem {
+public class MatrixItem implements IMatrixItem {
     private int index;
     private int value;
 

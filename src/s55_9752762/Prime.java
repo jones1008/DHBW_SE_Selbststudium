@@ -2,8 +2,8 @@ package s55_9752762;
 
 import java.util.List;
 
-public abstract class Prime {
-    protected MatrixItem[][] fillMatrix(MatrixItem[][] face, List<Integer> list) {
+public abstract class Prime implements IPrime{
+    public MatrixItem[][] fillMatrix(MatrixItem[][] face, List<Integer> list) {
         for (int i = 0; i < face.length; i++) {
             for (int j = 0; j < face[i].length; j++) {
                 if (list.contains(face[i][j].getIndex())) {

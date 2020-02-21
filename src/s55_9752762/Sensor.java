@@ -3,7 +3,7 @@ package s55_9752762;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Sensor {
+public abstract class Sensor implements ISensor {
     protected List<IListener> listeners;
     protected ICommand command;
 

@@ -1,6 +1,6 @@
 package s55_9752762;
 
-public class Sluice {
+public class Sluice implements ISluice {
     private FaceReader faceReader;
     private SluiceSensor sensor;
 
